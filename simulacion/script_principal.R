@@ -11,12 +11,12 @@ set.seed(26071842)
 source("C:/Users/sebas/Desktop/LABDatos/LABDatos_TPR/simulacion/funciones.R")
 
 #Definimos todas las variables que vamos a usar
-n_hogares = 1000
+n_hogares = 10000
 p_1 = 10
 p_2 = 5
 a_1 = 0.6
 a_2 = 0.4
-k = 10000
+k = 1000000
 
 #### Inciso 1: Generación de Ingresos ####
 #Hecho en funciones.R
