@@ -1,53 +1,57 @@
 #### Ejercicio Simulación 1: Demanda con preferencias Cobb-Douglas ####
-#Para empezar, voy a poner todo el código en este archivo (con las funciones). 
-#Una vez que esté más pulido, ahí pondré las funciones en su respectivo archivo
 
 #### Setup ####
+
+#Antes que nada, definimos una semilla. Ponemos 26/07/1842, la fecha de
+#nacimiento del gran economista Alfred Marshall
+
+set.seed(26071842)
+
+#Importamos funciones.R
+source("C:/Users/sebas/Desktop/LABDatos/LABDatos_TPR/simulacion/funciones.R")
+
 #Definimos todas las variables que vamos a usar
-n_hogares = 3000
+n_hogares = 1000
 p_1 = 10
 p_2 = 5
 a_1 = 0.6
 a_2 = 0.4
-x_1 = 0
-x_2 = 0
-u_function = (x_1**a_1)*(x_2**a_2)
-k = 1
+k = 10000
 
 #### Inciso 1: Generación de Ingresos ####
+#Hecho en funciones.R
 
-Y = rchisq(n_hogares, 30)
-hist(Y)
+#¿Cómo elegimos k?
+#¿Cómo cambia la dispersión de ingresos al variar k?
 
-#Veamos cómo varía la dispersión de ingresos a medida que cambia k: Vamos iterando los grados de 
-#libertad y ploteamos los histogramas todos juntos
+### La chi-cuadrado tiene una media de k y una varianza de 2k 
+### Por lo tanto, tiene sentido elegir el k que represente 
+### el ingreso promedio deseado. A medida que k aumente, la varianza
+### de los ingresos aumentará linealmente con k también
 
-#Hacemos una grilla de 1 fila y 4 columnas
-par(mfrow = c(1,4))
 
-#Iteramos histogramas de la chi cuadrado con un k cada vez mayor
-n_sim = 4
-deg = 4^(1:n_sim)
-means = numeric(n_sim)
-sds = numeric(n_sim)
-for (i in 1:n_sim){
-  Z = rchisq(n_hogares, deg[i])
-  hist(Z,
-       breaks = 30,
-       freq = FALSE,    #Representamos como densidad                              
-       col = adjustcolor("steelblue", alpha.f = 0.6), # Color
-       border = "white",
-       main = bquote(chi^2 ~ "con" ~ df == .(deg[i])), # Título (grados)
-       xlab = "Ingreso", ylab = "Densidad")
-  
-  # Densidad (curva)
-  curve(dchisq(x, deg[i]), add = TRUE, col = "firebrick", lwd = 2)
-  
-  #Guardamos media y sd de cada simulación
-  means[i] = mean(Z)
-  sds[i] = sd(Z)
-}
+#### Inciso 2: Demanda óptima Cobb-Douglas ####
+#Hecho en funciones.R
 
-#Volvemos al ploteo normal
+#### Inciso 3: Simulación Base ####
+
+demandas <- demanda_cd(simular_ingreso(n_hogares, k), p_1, p_2, a_1, a_2)
+
+# Para más prolijidad, ponemos los datos directamente en el histograma
+
+# Como tenemos que hacer 3 histogramas partiendo de los datos y reportar sus
+# medias y cuartiles para todas, definimos directamente una función para crear
+# el gráfico con los datos y la usamos para x1, x2 y la utilidad indirecta.
+
+#Hecho en funciones.R
+
+#Graficamos los 3 histogramas
+par(mfrow = c(1, 3))
+hist_resumen(demandas[[1]], "Histograma de la demanda del bien 1", "Demanda", "lightblue")
+hist_resumen(demandas[[2]], "Histograma de la demanda del bien 2", "Demanda", "lightgreen")
+hist_resumen(demandas[[3]], "Histograma de la utilidad indirecta", "Utilidad", "purple")
 par(mfrow = c(1, 1))
+
+#### Inciso 4: Probabilidad de bajo consumo en un bien ####
+
 
