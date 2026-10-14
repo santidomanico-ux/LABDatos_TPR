@@ -44,3 +44,20 @@ hist_resumen <- function(x, titulo, nombrex, color){
                     paste("Q3:", round(q[3], 2))),
          bty = "n")
 }
+
+#### Inciso 5: Probabilidad de bajo consumo en un bien ####
+# La probabilidad de que el consumo del bien i (x_i) sea menor a un umbral
+# c no es otra cosa que la suma de todas los booleanos en donde cada demanda
+# individual fue menor al umbral dividido por el total de casos. Entonces, 
+# definimos:
+
+
+prob_bajo_consumo <- function(c, j, data){
+  
+  prob <- sum(data[[j]] < c) / length(data[[j]])
+  return(prob)
+
+}
+
+
+
