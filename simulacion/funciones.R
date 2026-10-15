@@ -37,12 +37,13 @@ hist_resumen <- function(x, titulo, nombrex, color){
        main = titulo, xlab = nombrex, ylab = "Frecuencia",
        ylim = c(0, max(h$counts) * 1.35))    # espacio libre arriba (el máx es 1.35 * el máx del histograma)
   
+#Ponemos el texto bastante compacto arriba a la derecha
   legend("topright",
          legend = c(paste("Media:", round(mean(x), 2)),
                     paste("Q1:", round(q[1], 2)),
                     paste("Mediana:", round(q[2], 2)),
                     paste("Q3:", round(q[3], 2))),
-         bty = "n")
+         bty = "n", cex = 0.8, y.intersp = 0.9)
 }
 
 #### Inciso 5: Probabilidad de bajo consumo en un bien ####

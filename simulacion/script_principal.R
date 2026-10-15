@@ -69,10 +69,10 @@ prob_bajo_consumo(c, i, demandas)
 demandas_shock <- demanda_cd(Y, 1.2*p_1, p_2, a_1, a_2)
 
 #En este caso la diferencia entre medias es -10 para el bien 1 y 0 para el 2.
-#Es decir, dado un aumento del 20% del precio, cada agente consume en promedio
-# 10 unidades menos del bien 1 y 0 unidades menos del bien 2. Tiene sentido
-# que el consumo del bien 2 no se vea afectado ya que la demanda óptima del 
-# bien 2 no depende de p1
+#Es decir, dado un aumento del 20% del precio, cada agente consume (en promedio)
+# 10 unidades menos del bien 1 (la caída individual es proporcional)
+#y 0 unidades menos del bien 2. Tiene sentido que el consumo del bien 2 no se 
+#vea afectado ya que la demanda óptima del bien 2 no depende de p1
 
 diff_1<- mean(demandas_shock[[1]]) - mean(demandas[[1]])
 diff_2<- mean(demandas_shock[[2]]) - mean(demandas[[2]])
@@ -115,6 +115,37 @@ legend("topright",
 #Discutir qué sucede con la masa de hogares que consumen muy poco del
 #bien 1 y cómo cambia la utilidad indirecta promedio U ∗
 
+#En promedio, la utilidad de cada agente cae en 7 unidades
+diff_U <- mean(demandas_shock[[3]]) - mean(demandas[[3]])
+
+#Sobre los hogares que consumen poco: Como la demanda óptima de x1 es 
+#(a_1*Y[i])/p_1 por Cobb-Douglas, el shock de p1 = 1.2p1 multiplica la 
+#demanda por 1/1,2, desplazando toda la distribución hacia la izquierda
+
+#### Inciso 7: Heterogeneidad en Preferencias ####
+
+#Definimos los parámetros alpha y beta, las nuevas elasticidades y
+#volvemos a definir las demandas con el mismo ingreso y precios, pero con los
+#nuevos a1 y a2
+a <- 3
+b <- 2
+
+new_a1 <- rbeta(n_hogares, a, b)
+
+demandas_beta <- demanda_cd(Y, p_1, p_2, new_a1, 1-new_a1 )
+
+#Contrastemos las demandas y utilidades de cada caso, todo en un solo gráfico:
+
+par(mfrow = c(2, 3))
+hist_resumen(demandas[[1]], "Demanda del bien 1 con a1 = 0.6", "Demanda", "lightblue")
+hist_resumen(demandas[[2]], "Demanda del bien 2 con a1 = 0.6", "Demanda", "lightgreen")
+hist_resumen(demandas[[3]], "Utilidad indirecta con a1 = 0.6", "Utilidad", "purple")
+hist_resumen(demandas_beta[[1]], "Demanda del bien 1 con a1 ~ Beta(a,b)", "Utilidad", "lightblue")
+hist_resumen(demandas_beta[[2]], "Demanda del bien 2 con a1 ~ Beta(a,b)", "Utilidad", "green")
+hist_resumen(demandas_beta[[3]], "Utilidad indirecta con a1 ~ Beta(a,b)", "Utilidad", "purple")
+
+par(mfrow = c(1, 1))
 
 
-
+#Comparar desvíos estándares y sensibilidad al shock de precios, 
+# preferencias heterogéneas
