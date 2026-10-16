@@ -29,7 +29,7 @@
 library(tidyverse)
 source("analisis_datos/funciones.R")
 
-datos <- read_csv("analisis_datos/data/produccin-de-pozos-de-gas-y-petrleo-no-convencional.csv")
+datos <- read_csv("analisis_datos/data/produccin-de-pozos-de-gas-y-petrleo-no-convencional.csv.gz")
 
 clean_data <- datos %>% filter(anio >= 2014, anio <= 2025) %>%
   select(anio, idpozo, prod_pet, prod_gas, empresa, sub_tipo_recurso)
