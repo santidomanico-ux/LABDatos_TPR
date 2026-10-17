@@ -1,27 +1,20 @@
 # Funciones del ejercicio de Analisis de datos
 # Cada funcion recibe la columna a analizar como argumento (prod_gas o prod_pet),
 # asi el mismo codigo sirve para el gas y para el petroleo.
-# Las llaves {{ }} le indican a tidyverse que el argumento es el nombre de una columna.
 
 # Produccion total y market share de cada empresa en todo el periodo,
 # ordenado de mayor a menor.
-share_total <- function(datos, variable) {
-  datos %>% group_by(empresa) %>% summarise(produccion = sum({{ variable }})) %>%
-    mutate(market_share = produccion / sum(produccion)) %>% arrange(desc(produccion))
-}
+share_total <- function(datos, variable) {datos %>% group_by(empresa) %>% summarise(produccion = sum({{ variable }})) %>%
+mutate(market_share = produccion / sum(produccion)) %>% arrange(desc(produccion))}
 
 # Produccion y market share de cada empresa, año por año.
-share_anual <- function(datos, variable) {
-  datos %>% group_by(anio, empresa) %>%
-    summarise(produccion = sum({{ variable }}), .groups = "drop_last") %>%
-    mutate(market_share = produccion / sum(produccion)) %>% ungroup()
+share_anual <- function(datos, variable) {datos %>% group_by(anio, empresa) %>%
+summarise(produccion = sum({{ variable }}), .groups = "drop_last") %>%mutate(market_share = produccion / sum(produccion)) %>% ungroup()
 }
 
 # Produccion anual como indice: (produccion en t / produccion en el año base) * 100.
-indice_base <- function(datos, variable, anio_base = 2014) {
-  datos %>% group_by(anio) %>% summarise(produccion = sum({{ variable }})) %>%
-    mutate(crecimiento = produccion / produccion[anio == anio_base] * 100)
-}
+indice_base <- function(datos, variable, anio_base = 2014) {datos %>% group_by(anio) %>% summarise(produccion = sum({{ variable }})) %>%
+mutate(crecimiento = produccion / produccion[anio == anio_base] * 100)}
 
 # Evolucion del market share de las empresas del top, una linea por empresa.
 # `shares` es la salida de share_anual().
