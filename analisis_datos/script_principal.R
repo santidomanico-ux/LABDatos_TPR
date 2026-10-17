@@ -37,8 +37,9 @@ clean_data %>% summarise(na_pet = sum(is.na(prod_pet)), na_gas = sum(is.na(prod_
                          negativos_pet = sum(prod_pet < 0), negativos_gas = sum(prod_gas < 0),
                          na_tipo_recurso = sum(is.na(sub_tipo_recurso)))
 
-# No hay NAs en la produccion. Hay 4 pozos (386 registros) sin tipo de roca: en el
-# inciso 3 cambian la participacion de Shale en menos de 0,05 puntos porcentuales.
+# No hay NAs en la produccion. Hay 4 pozos (386 registros) sin tipo de roca: los
+# sacamos solo en el inciso 3, que es el unico que usa esa variable. En los incisos
+# 1 y 2 los dejamos, porque su produccion si esta registrada.
 
 
 clean_data %>% count(anio)
@@ -139,7 +140,7 @@ produccion_total
 # que la concentracion de mercado cayo y que entraron nuevos players.
 
 # Participacion de Shale y de Tight en los pozos activos, año a año
-shale_tight <- clean_data %>% group_by(anio) %>%
+shale_tight <- clean_data %>% filter(!is.na(sub_tipo_recurso)) %>% group_by(anio) %>%
   summarise(share_shale = n_distinct(idpozo[sub_tipo_recurso == "SHALE"]) / n_distinct(idpozo)) %>%
   mutate(share_tight = 1 - share_shale)
 shale_tight
