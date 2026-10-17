@@ -2,7 +2,7 @@
 
 Examen domiciliario de R — Laboratorio de Datos, Universidad Torcuato Di Tella (2026).
 
-**Integrantes:** Kevin Burghardt, Sebastián Roballos
+**Integrantes:** Kevin Burghardt, Santino Domanico, Sebastián Roballos
 
 ## Estructura
 
