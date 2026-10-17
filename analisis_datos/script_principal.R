@@ -21,9 +21,6 @@
 # Todo el dataset (y por ende las conclusiones) es sobre produccion de gas y
 # petroleo NO convencional.
 
-# Como correrlo: abrir el proyecto en RStudio (directorio de trabajo = raiz del
-# repositorio) y ejecutar este script completo.
-
 #Cargo las librerias e importo las funciones que use en mas de una ocasion
 #a lo largo del ejercicio.
 library(tidyverse)
@@ -31,8 +28,6 @@ source("analisis_datos/funciones.R")
 
 datos <- read_csv("analisis_datos/data/produccin-de-pozos-de-gas-y-petrleo-no-convencional.csv.gz")
 
-#Me voy a quedar con la muestra a partir de 2014 hasta 2025. Antes del 2014 no habia suficientes muestras
-# y el 2026 no se completo. 
 clean_data <- datos %>% filter(anio >= 2014, anio <= 2025) %>%
   select(anio, idpozo, prod_pet, prod_gas, empresa, sub_tipo_recurso)
 # Exploracion: calidad de los datos
@@ -42,7 +37,8 @@ clean_data %>% summarise(na_pet = sum(is.na(prod_pet)), na_gas = sum(is.na(prod_
                          negativos_pet = sum(prod_pet < 0), negativos_gas = sum(prod_gas < 0),
                          na_tipo_recurso = sum(is.na(sub_tipo_recurso)))
 
-# No hay NAs!
+# No hay NAs en la produccion. Hay 4 pozos (386 registros) sin tipo de roca: en el
+# inciso 3 cambian la participacion de Shale en menos de 0,05 puntos porcentuales.
 
 
 clean_data %>% count(anio)
@@ -141,10 +137,6 @@ produccion_total
 # La pregunta "Shale o Tight" complementa los incisos anteriores. Vimos que hacia 2018-2020
 # aumento la produccion de petroleo (exponencialmente) y de gas (mas suavemente),
 # que la concentracion de mercado cayo y que entraron nuevos players.
-# Recordemos que extraer recursos de roca Shale es mas complejo y caro, pero a su
-# vez produce una cantidad notablemente mayor que explotar roca Tight. Mayor
-# explotacion de roca Shale se relaciona con mayor confianza, inversion y madurez
-# del proyecto.
 
 # Participacion de Shale y de Tight en los pozos activos, año a año
 shale_tight <- clean_data %>% group_by(anio) %>%
