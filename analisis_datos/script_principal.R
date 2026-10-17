@@ -51,12 +51,6 @@ clean_data %>% count(anio)
 # Algunas empresas aparecen con mas de un nombre porque lo cambiaron durante el
 # periodo del dataset. Si no los unificamos, una misma empresa se cuenta como varias
 # y su market share queda subestimado. Unificamos al nombre mas reciente.
-nombres_unificados <- c("Vista Oil & Gas Argentina SA"                 = "VISTA ENERGY ARGENTINA SAU",   # 2018-2019
-"VISTA OIL & GAS ARGENTINA SAU"                = "VISTA ENERGY ARGENTINA SAU",   # 2019-2022
-"PAN AMERICAN ENERGY (SUCURSAL ARGENTINA) LLC" = "PAN AMERICAN ENERGY SL",       # 2014-2019
-"WINTERSHALL ENERGIA S.A."                     = "WINTERSHALL DEA ARGENTINA S.A",# 2014-2019
-"MADALENA AUSTRAL S.A."                        = "MADALENA ENERGY ARGENTINA SRL" # 2016-2017 )
-
 clean_data <- clean_data %>%mutate(empresa = ifelse(empresa %in% c("Vista Oil & Gas Argentina SA", "VISTA OIL & GAS ARGENTINA SAU"),
 "VISTA ENERGY ARGENTINA SAU", empresa),empresa = ifelse(empresa == "PAN AMERICAN ENERGY (SUCURSAL ARGENTINA) LLC",
 "PAN AMERICAN ENERGY SL", empresa),empresa = ifelse(empresa == "WINTERSHALL ENERGIA S.A.", "WINTERSHALL DEA ARGENTINA S.A", empresa),
