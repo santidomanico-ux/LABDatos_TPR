@@ -1,8 +1,8 @@
 # Ejercicio de Analisis de datos: Oil & Gas no convencional en Argentina
 
 # 1) ¿Cuales son los grandes players del Oil & Gas en Argentina y como se reparten
-#    el mercado? Definimos "gran player" a aquellas empresas que esten en el top cinco
-#    de mayor market share en terminos de cantidades a lo largo de todo el dataset.
+# el mercado? Definimos "gran player" a aquellas empresas que esten en el top cinco
+# de mayor market share en terminos de cantidades a lo largo de todo el dataset.
 # 2) ¿Petroleo o gas, como crecio cada uno?
 # 3) ¿Los recursos se extraen de piedra Shale o Tight, como evoluciono?
 
@@ -24,13 +24,15 @@
 # Como correrlo: abrir el proyecto en RStudio (directorio de trabajo = raiz del
 # repositorio) y ejecutar este script completo.
 
-# Setup
-
+#Cargo las librerias e importo las funciones que use en mas de una ocasion
+#a lo largo del ejercicio.
 library(tidyverse)
 source("analisis_datos/funciones.R")
 
 datos <- read_csv("analisis_datos/data/produccin-de-pozos-de-gas-y-petrleo-no-convencional.csv.gz")
 
+#Me voy a quedar con la muestra a partir de 2014 hasta 2025. Antes del 2014 no habia suficientes muestras
+# y el 2026 no se completo. 
 clean_data <- datos %>% filter(anio >= 2014, anio <= 2025) %>%
   select(anio, idpozo, prod_pet, prod_gas, empresa, sub_tipo_recurso)
 # Exploracion: calidad de los datos
@@ -40,32 +42,27 @@ clean_data %>% summarise(na_pet = sum(is.na(prod_pet)), na_gas = sum(is.na(prod_
                          negativos_pet = sum(prod_pet < 0), negativos_gas = sum(prod_gas < 0),
                          na_tipo_recurso = sum(is.na(sub_tipo_recurso)))
 
-# No hay NAs en la produccion. Hay 386 registros sin tipo de roca, que no afectan
-# los incisos 1 y 2.
+# No hay NAs!
+
 
 clean_data %>% count(anio)
 
-# Limpieza: unificacion de nombres de empresas
+ # Unificacion de nombres de empresas:
 # Algunas empresas aparecen con mas de un nombre porque lo cambiaron durante el
 # periodo del dataset. Si no los unificamos, una misma empresa se cuenta como varias
 # y su market share queda subestimado. Unificamos al nombre mas reciente.
-nombres_unificados <- c(
-  "Vista Oil & Gas Argentina SA"                 = "VISTA ENERGY ARGENTINA SAU",   # 2018-2019
-  "VISTA OIL & GAS ARGENTINA SAU"                = "VISTA ENERGY ARGENTINA SAU",   # 2019-2022
-  "PAN AMERICAN ENERGY (SUCURSAL ARGENTINA) LLC" = "PAN AMERICAN ENERGY SL",       # 2014-2019
-  "WINTERSHALL ENERGIA S.A."                     = "WINTERSHALL DEA ARGENTINA S.A",# 2014-2019
-  "MADALENA AUSTRAL S.A."                        = "MADALENA ENERGY ARGENTINA SRL" # 2016-2017
-)
+nombres_unificados <- c("Vista Oil & Gas Argentina SA"                 = "VISTA ENERGY ARGENTINA SAU",   # 2018-2019
+"VISTA OIL & GAS ARGENTINA SAU"                = "VISTA ENERGY ARGENTINA SAU",   # 2019-2022
+"PAN AMERICAN ENERGY (SUCURSAL ARGENTINA) LLC" = "PAN AMERICAN ENERGY SL",       # 2014-2019
+"WINTERSHALL ENERGIA S.A."                     = "WINTERSHALL DEA ARGENTINA S.A",# 2014-2019
+"MADALENA AUSTRAL S.A."                        = "MADALENA ENERGY ARGENTINA SRL" # 2016-2017 )
 
-# No unificamos adquisiciones (otra empresa comprada por un grupo), porque eso
-# cambiaria la pregunta de "quien produce" a "que grupo controla":
-# Petrobras Argentina (comprada por Pampa Energia), Apache e YSUR (por YPF),
-# CGC Energia (ex Sinopec, del grupo CGC) y Pluspetrol Cuenca Neuquina (ex ExxonMobil).
+clean_data <- clean_data %>%mutate(empresa = ifelse(empresa %in% c("Vista Oil & Gas Argentina SA", "VISTA OIL & GAS ARGENTINA SAU"),
+"VISTA ENERGY ARGENTINA SAU", empresa),empresa = ifelse(empresa == "PAN AMERICAN ENERGY (SUCURSAL ARGENTINA) LLC",
+"PAN AMERICAN ENERGY SL", empresa),empresa = ifelse(empresa == "WINTERSHALL ENERGIA S.A.", "WINTERSHALL DEA ARGENTINA S.A", empresa),
+empresa = ifelse(empresa == "MADALENA AUSTRAL S.A.", "MADALENA ENERGY ARGENTINA SRL", empresa))
 
-clean_data <- clean_data %>% mutate(empresa = coalesce(unname(nombres_unificados[empresa]), empresa))
-
-# 1) Grandes players
-
+#Calculo cuanto gas produjo cada empresa       
 players_gas <- share_total(clean_data, prod_gas)
 players_gas
 
@@ -81,7 +78,8 @@ players_pet
 # al sexto puesto. Los top cinco players se reparten el 87% del mercado: el mercado
 # del petroleo en Argentina esta mas concentrado que el del gas.
 # Es interesante a su vez ver la evolucion de estos players a lo largo de los años.
-
+                        
+# Toma al top 5 en produccion de cada bien.
 top_5_gas <- head(players_gas$empresa, 5)
 top_5_pet <- head(players_pet$empresa, 5)
 
@@ -142,11 +140,11 @@ produccion_total
 # Es interesante observar el crecimiento de la produccion de petroleo y gas junto
 # con lo observado en el inciso 1) sobre los players: hay una coincidencia temporal
 # entre la entrada de nuevos players, una menor concentracion de mercado y el
-# aumento exponencial de la produccion de petroleo.
+# aumento de la produccion de petroleo.
 
 # 3) Shale o Tight
 
-# Shale o Tight complementa los incisos anteriores. Vimos que hacia 2018-2020
+# La pregunta "Shale o Tight" complementa los incisos anteriores. Vimos que hacia 2018-2020
 # aumento la produccion de petroleo (exponencialmente) y de gas (mas suavemente),
 # que la concentracion de mercado cayo y que entraron nuevos players.
 # Recordemos que extraer recursos de roca Shale es mas complejo y caro, pero a su
