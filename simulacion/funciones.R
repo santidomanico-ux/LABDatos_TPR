@@ -12,15 +12,9 @@ simular_ingreso <- function(n, k){
 #con todos los valores
 
 demanda_cd <- function(Y, p_1, p_2, a_1, a_2){
-  xopt_1 <- numeric(length(Y))
-  xopt_2 <- numeric(length(Y))
-  U_opt <-  numeric(length(Y))
-  
-  for (i in 1:length(Y)){
-  xopt_1[i] <- (a_1*Y[i])/p_1
-  xopt_2[i] <- (a_2*Y[i])/p_2
-  U_opt[i]  <- (xopt_1[i]**a_1)* (xopt_2[i]**a_2)
-  }
+  xopt_1 <- (a_1 * Y) / p_1
+  xopt_2 <- (a_2 * Y) / p_2
+  U_opt  <- (xopt_1 ^ a_1) * (xopt_2 ^ a_2)
   
   return(list(xopt_1 = xopt_1, xopt_2 = xopt_2, U_opt = U_opt))
 }
