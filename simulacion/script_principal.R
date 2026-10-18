@@ -240,17 +240,21 @@ legend("topright",
 diff_1_beta <- mean(demandas_beta_shock[[1]]) - mean(demandas_beta[[1]])
 diff_2_beta <- mean(demandas_beta_shock[[2]]) - mean(demandas_beta[[2]])
 diff_U_beta <- mean(demandas_beta_shock[[3]]) - mean(demandas_beta[[3]])
+diff_porcentaje_u <- mean(demandas_shock[[3]]) / mean(demandas[[3]]) - 1             #caída porcentual de U, homogéneo
+diff_porcentaje_u_beta <- mean(demandas_beta_shock[[3]]) / mean(demandas_beta[[3]]) - 1   #caída porcentual de U, Beta
+
 c(diff_1, diff_1_beta)   #cambio medio en x1: homogéneo vs Beta
 c(diff_2, diff_2_beta)   #cambio medio en x2 (ambos son 0)
-c(diff_U, diff_U_beta)   #cambio medio en U: homogéneo vs Beta
+c(diff_porcentaje_u, diff_porcentaje_u_beta)   #caída porcentual  en U: homogéneo vs Beta
+c(diff_U, diff_U_beta)   # cambio medio en U: homogéneo vs Beta
 
-#El bien 1 cae casi lo mismo en ambos casos (−9,998 contra −9,954): como la media de α1 es la
+#El bien 1 cae casi lo mismo en ambos casos (−9,998 contra −9,954): como la media de a1 es la
 #misma (0,6), la demanda media del bien 1 es parecida (alrededor de 60) y la caída es aproximadamente
 #un sexto de eso (alrededor de 10). El bien 2 no cambia en ninguno de los dos casos, porque su
 #demanda no depende de p1. La utilidad media cae un poco más con Beta en unidades (−6,97 contra−7,41),
 #pero eso es porque parte de un nivel más alto (74,4 contra 67,3): en porcentaje la caída
 #es similar, algo menor con Beta (−10,0 % contra −10,4 %). Fundamentalmente, lo que cambia con 
-#la heterogeneidad de preferencias no es la caída media, sino quién pierde más: los hogares con α1 alto
+#la heterogeneidad de preferencias no es la caída media, sino quién pierde más: los hogares con a1 alto
 
 
 
