@@ -17,6 +17,7 @@ LABDatos_TPR/
 ├── analisis_econometrico/
 │   ├── script_principal.R
 │   └── funciones.R
+│   └── data/
 └── simulacion/
     ├── script_principal.R
     └── funciones.R
@@ -44,7 +45,8 @@ Cada ejercicio tiene su propio `script_principal.R`, que carga sus funciones des
 
 ### Análisis econométrico: gapminder
 
-Regresiones sobre ingreso por persona y esperanza de vida con el dataset gapminder.
+Regresiones sobre ingreso por persona y esperanza de vida con el dataset gapminder (`data/gapminder.csv`): modelos polinómicos de ingreso para Argentina con testeo en los últimos 10 años, correlaciones entre países sudamericanos, y regresiones simples y múltiples de esperanza de vida (2010), con contrastes de hipótesis y selección de un modelo de hasta tres covariables.
+Este script se corre con el directorio de trabajo en `analisis_econometrico/`, porque lee `data/gapminder.csv` y carga `funciones.R` con rutas relativas.
 
 ### Simulación: demanda con preferencias Cobb-Douglas
 
